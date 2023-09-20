@@ -1,13 +1,15 @@
 /*
 Author: Nicole Hackler
-Date: 9/19/23
+Date: 9/20/23
 
+Exercise 15 - Animation
 (Animation: rectangle on a pentagon) You will write a program that animates a rectangle
 moving along the outline of a pentagon. Enable the user to resume/pause with the left/right
 mouse button. The rectangle's opacity should change as it moves around the pentagon.
 
- */
+*/
 import javafx.animation.PathTransition;
+import javafx.animation.FadeTransition;
 import javafx.animation.Timeline;
 import javafx.application.Application;
 import javafx.scene.Scene;
@@ -43,7 +45,7 @@ public class Rectangle_on_a_Pentagon extends Application {
         pane.getChildren().add(pentagon);
         pane.getChildren().add(rectangle);
 
-        // Create a path transition
+        // Create a path transition, the path is set to the pentagon
         PathTransition pt = new PathTransition(); //Path object
         pt.setDuration(Duration.millis(4000)); //Speed of the rectangle along the path
         pt.setPath(pentagon); //The path the rectangle will take is set to the pentagon
@@ -53,9 +55,21 @@ public class Rectangle_on_a_Pentagon extends Application {
         pt.setCycleCount(Timeline.INDEFINITE); //FINAL to run forever
         pt.play(); // Start animation
 
-        //listeners for play and pause on the mouse button presses
+        //listeners for path on the rectangle takes on the pentagon with play and pause on the mouse button presses
         pentagon.setOnMousePressed(e -> pt.pause());
         pentagon.setOnMouseReleased(e -> pt.play());
+
+        //Create a fade transition for the rectangle
+        FadeTransition ft = new FadeTransition(Duration.millis(3000), rectangle);
+        ft.setFromValue(1.0); //start opaque value (solid)
+        ft.setToValue(0.1); //ending opaque value (lightest)
+        ft.setCycleCount(Timeline.INDEFINITE); //FINAL to run forever
+        ft.setAutoReverse(true); //Reverse so it will fade in and out
+        ft.play(); // Start animation
+
+        //listeners for the fade transition play and pause on the mouse button presses
+        rectangle.setOnMousePressed(e -> ft.pause());
+        rectangle.setOnMouseReleased(e -> ft.play());
 
         // Create a scene and place it in the stage
         Scene scene = new Scene(pane, 250, 200);
